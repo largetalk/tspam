@@ -53,3 +53,27 @@ def kmp(text, pattern):
 
     return -1
 
+
+def bm(text, pattern):
+    t_l = len(text)
+    p_l = len(pattern)
+    if p_l == 0 or p_l > t_l:
+        return -1
+
+    skip = []
+    for k in range(256): skip.append(p_l)
+    for k in range(p_l - 1):
+        skip[ord(pattern[k])] = p_l - k - 1
+
+
+    i = p_l - 1
+    while i < t_l:
+        j = p_l - 1
+        k = i
+        while j >= 0 and text[k] == pattern[j]:
+            j -= 1; k -= 1
+        if j == -1: return k + 1
+        i += skip[ord(text[i])]
+
+    return -1
+
