@@ -13,6 +13,8 @@ def init_banned_tree():
 
     with open(banned_text, 'rb') as fp:
         data = fp.read()
+        if not isinstance(data, unicode):
+            data = data.decode('utf-8')
 
         words = data.split(SPLIT)
         BANNED_T = trie.fromkeys(words, 1)
@@ -21,7 +23,10 @@ def init_banned_tree():
 
 def replace_banned(text):
     init_banned_tree()
+    if not isinstance(text, unicode):
+        text = text.decode('utf-8')
     l = len(text)
+
     i = 0
     result = []
     while i < l:
@@ -31,7 +36,7 @@ def replace_banned(text):
             try:
                 pre = BANNED_T.longest_prefix(check_word)
                 w_l = len(pre)
-                result.append('*' * w_l )
+                result.append('*' * w_l)
                 i += w_l
                 continue
             except:
@@ -40,8 +45,5 @@ def replace_banned(text):
         i += 1
 
     return ''.join(result)
-
-print replace_banned('强烈要求领导财产公示和收回钓鱼岛')
-            
 
 
