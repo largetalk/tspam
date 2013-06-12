@@ -1,8 +1,9 @@
 <div>
-<form action="." method="post">
+<form action="/replace" method="post">
 <p>input:<input type="text" name="input" ng-model="input" /><p>
 <p>{{ input }}</p>
-<input type="submit" value="Submit" />
+<input type="button" value="submit" id="submit_input" ng-click="submit_ajax_input()"/>
+<!-- <input type="submit" value="Submit" /> -->
 </form>
 
 <p>{{ output }}</p>
