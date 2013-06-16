@@ -4,6 +4,7 @@ import tornado.template
 import os, sys
 from json import loads as json_decode
 from banned import init_banned_tree, replace_banned
+from acspam import inspector
 
 
 class ReplaceBannedHandler(tornado.web.RequestHandler):
@@ -22,6 +23,18 @@ class ReplaceBannedHandler(tornado.web.RequestHandler):
         else:
             self.write('something wrong')
 
+class AcReplaceBannedHandler(tornado.web.RequestHandler):
+    def prepare(self):
+        self.arguments = None
+        content_type = self.request.headers.get("Content-Type", "")
+        if content_type.startswith("application/json"):
+            self.arguments = json_decode(self.request.body)
+
+    def post(self):
+        if self.arguments and 'input' in self.arguments:
+            self.write(inspector.replace(self.arguments['input']))
+        else:
+            self.write('something wrong')
 
 
 DEBUG=True
@@ -33,6 +46,7 @@ loader = tornado.template.Loader(template_path)
 application = tornado.web.Application([
     (r'/static/(.*)', tornado.web.StaticFileHandler, {'path': static_path}),
     (r"/replace", ReplaceBannedHandler),
+    (r"/ac_replace", AcReplaceBannedHandler),
     ], debug=DEBUG)
 
 if __name__ == "__main__":

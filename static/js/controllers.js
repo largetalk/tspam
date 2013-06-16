@@ -19,6 +19,19 @@ angular.module('BannedApp.controllers', []).
               });
       };
 
+      $scope.submit_ajax_input2 = function() {
+          $http({
+              url:'/ac_replace',
+              data: JSON.stringify({'input': $scope.input2}),
+              headers: {
+                "Content-Type": "application/json; charset=utf-8"
+              },
+              method:'POST'})
+              .success(function(data) {
+                  $scope.output2 = data;
+              });
+      };
+
   }])
   .controller('MyCtrl2', [function() {
 
